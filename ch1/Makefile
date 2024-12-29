@@ -1,8 +1,8 @@
 helloWorld: helloWorld/Main.cs FORCE
-	mcs -lib: helloWorld/Main.cs -out:ch1_helloWorld.exe
+	csc -out:ch1_helloWorld.exe helloWorld/Main.cs
 
 theBasics: theBasics/Main.cs theBasics/IPerson.cs theBasics/PublicServant.cs theBasics/FireFighter.cs theBasics/PoliceOfficer.cs FORCE
-	mcs -lib: theBasics/Main.cs theBasics/IPerson.cs theBasics/PublicServant.cs theBasics/FireFighter.cs theBasics/PoliceOfficer.cs -out:ch1_the_basics.exe
+	csc -out:ch1_the_basics.exe theBasics/Main.cs theBasics/IPerson.cs theBasics/PublicServant.cs theBasics/FireFighter.cs theBasics/PoliceOfficer.cs
 
 FORCE:
 
