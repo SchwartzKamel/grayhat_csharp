@@ -20,6 +20,7 @@ WORKDIR /home/gundam
 # Copy in src folders and Makefile
 COPY /ch1/helloWorld /home/gundam/helloWorld
 COPY /ch1/theBasics /home/gundam/theBasics
+COPY /ch1/pinvoke /home/gundam/pinvoke
 COPY /ch1/Makefile /home/gundam/Makefile
 
 RUN make ch1
@@ -40,6 +41,7 @@ RUN apt-get update && apt-get upgrade -y \
 RUN useradd --create-home gundam
 COPY --from=csharp-builder-image-ch1 --chown=gundam:gundam /home/gundam/ch1_helloWorld.exe /home/gundam/ch1_helloWorld.exe
 COPY --from=csharp-builder-image-ch1 --chown=gundam:gundam /home/gundam/ch1_the_basics.exe /home/gundam/ch1_the_basics.exe
+COPY --from=csharp-builder-image-ch1 --chown=gundam:gundam /home/gundam/ch1_pinvoke.exe /home/gundam/ch1_pinvoke.exe
 
 # Switch from root to gundam, change to `/home/gundam` dir
 USER gundam
