@@ -8,18 +8,19 @@ namespace ch1_the_basics
         {
             this.Name = name;
             this.Age = age;
+
+            this.DriveToPlaceOfInterest += delegate
+            {
+                Console.WriteLine("Drving the firetruck");
+                GetInFiretruck();
+                TurnOnSiren();
+                FollowDirection();
+            };
         }
 
         // Implement the IPerson interface
         public string Name { get; set; }
         public int Age { get; set; }
-
-        public override void DriveToPlaceOfInterest()
-        {
-            GetInFiretruck();
-            TurnOnSiren();
-            FollowDirection();
-        }
 
         public void GetInFiretruck() {}
         public void TurnOnSiren() {}

@@ -16,12 +16,15 @@ namespace ch1_the_basics
 
 			PoliceOfficer officer = new PoliceOfficer ("Jane Hope", 32);
 			officer.PensionAmount = 5500;
-			officer.HasEmergency = true;
 
 			PrintNameAndAge(officer);
 			PrintPensionAmount(officer);
 
 			officer.DriveToPlaceOfInterest();
+
+            officer = new PoliceOfficer ("John Valor", 32, true);
+            PrintNameAndAge(officer);
+            officer.DriveToPlaceOfInterest();
         }
 
         static void PrintNameAndAge (IPerson person)

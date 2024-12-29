@@ -5,11 +5,30 @@ namespace ch1_the_basics
     public class PoliceOfficer : PublicServant, IPerson
     {
         private bool _hasEmergency;
-        public PoliceOfficer(string name, int age)
+        public PoliceOfficer(string name, int age, bool _hasEmergency = false)
         {
             this.Name = name;
             this.Age = age;
-            _hasEmergency = false;
+            this.HasEmergency = _hasEmergency;
+
+            if (this.HasEmergency)
+            {
+                this.DriveToPlaceOfInterest += delegate
+                {
+                    Console.WriteLine("Driving the police car with siren");
+                    GetInPoliceCar();
+                    TurnOnSiren();
+                    FollowDirection();
+                };
+            } else
+            {
+                this.DriveToPlaceOfInterest += delegate
+                {
+                    Console.WriteLine("Driving the police car");
+                    GetInPoliceCar();
+                    FollowDirection();
+                };
+            }
         }
 
         // Implement the IPerson interface
@@ -20,14 +39,6 @@ namespace ch1_the_basics
         {
             get { return _hasEmergency; }
             set { _hasEmergency = value; }
-        }
-
-        public override void DriveToPlaceOfInterest()
-        {
-            GetInPoliceCar();
-            if (this.HasEmergency)
-                TurnOnSiren();
-            FollowDirection();
         }
 
         public void GetInPoliceCar() {}
