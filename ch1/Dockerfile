@@ -1,16 +1,41 @@
 # Using Ubuntu 24.04
-# Builder Image
-FROM Ubuntu:24.04 as csharp-builder-image
+# Builder Image Chapter 1
+FROM ubuntu:24.04 AS csharp-builder-image-ch1
 
 # Avoid stuck build due to user prompt
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y tzdata software-properties-common ca-certificates gnupg \
-      && sudo gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
-      && echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list \
-      && sudo apt update && apt-get install --no-install-recommends -y \
-      && apt-get install mono-devel \
+RUN apt-get update && apt-get install -y tzdata software-properties-common make ca-certificates gnupg \
+      && gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+      && echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
+      && apt update && apt-get install --no-install-recommends -y \
+      && apt-get install -y mono-devel \
       && apt-get clean \
       && rm -rf /var/lib/apt/lists/*/*
 
-# Function to see all dir names and then `mcs <all .cs files in dir> -out:<dir_name.exe>
+# Using final folder pathing to make copies easy
+RUN mkdir /home/gundam
+WORKDIR /home/gundam
+
+# Copy in src folders and Makefile
+COPY /ch1/helloWorld /home/gundam/helloWorld
+COPY /ch1/theBasics /home/gundam/theBasics
+COPY /ch1/Makefile /home/gundam/Makefile
+
+RUN make ch1
+
+# Runner Image
+FROM ubuntu:24.04 AS runner-image
+
+RUN apt-get update && apt-get upgrade -y \
+      && apt-get install -y tzdata software-properties-common \
+      && apt-get install --no-install-recommends -y \
+      && apt-get clean \
+      && rm -rf /var/lib/apt/lists/*
+
+RUN useradd --create-home gundam
+COPY --from=csharp-builder-image-ch1 /home/gundam/ch1_helloWorld.exe /home/gundam/ch1_helloWorld.exe
+COPY --from=csharp-builder-image-ch1 /home/gundam/ch1_the_basics.exe /home/gundam/ch1_the_basics.exe
+      
+USER gundam
+WORKDIR /home/gundam
